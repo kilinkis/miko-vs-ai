@@ -21,21 +21,22 @@ const queries = {
 }
 
 export function App() {
-    const [count, setCount] = useState(0)
+    const [results, setResults] = useState('')
 
     return (
         <div class="grid gap-12">
             <h1 class="text-5xl">MIKO vs AI</h1>
-            <div>
+            <div class="grid gap-8">
                 <button
                     class="border border-indigo-700 rounded-lg py-2 px-4"
-                    onClick={() => setCount((count) => count + 1)}
+                    onClick={() => setResults((results) => `${results} some results`)}
                 >
-                    count is {count}
+                    Count LLC
                 </button>
-                <p>
-                    Edit <code>src/app.tsx</code> and save to test HMR
-                </p>
+                <textarea>{results}</textarea>
+                <small>
+                    Powered by <code>chatGPT</code>
+                </small>
             </div>
         </div>
     )
