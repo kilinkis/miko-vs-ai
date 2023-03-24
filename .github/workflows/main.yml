@@ -40,7 +40,7 @@ jobs:
             - name: Build
               run: npm run build
               env:
-                  ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+                  VITE_GPT_API_KEY: ${{ secrets.VITE_GPT_API_KEY }}
             - name: Setup Pages
               uses: actions/configure-pages@v3
             - name: Upload artifact
