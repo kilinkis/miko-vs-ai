@@ -29,6 +29,11 @@ const queries = {
 
 type Queries = keyof typeof queries
 
+const queriesLabels: Record<string, string> = {
+    llc: 'How many Limited Liability Companies found?',
+    usa: 'Are there companies from USA in this dataset?',
+}
+
 type Messages = {
     role: string
     content: string
@@ -104,10 +109,10 @@ export function App() {
                             <option value="" disabled selected hidden>
                                 Select one
                             </option>
-                            {Object.entries(queries).map(([key, val]) => {
+                            {Object.entries(queries).map(([key]) => {
                                 return (
                                     <option key={key} value={key}>
-                                        {val}
+                                        {queriesLabels[key]}
                                     </option>
                                 )
                             })}
@@ -121,7 +126,7 @@ export function App() {
                             }
                             disabled={isLoading}
                         >
-                            Query
+                            Run query
                         </button>
                     </div>
                 </div>
