@@ -27,18 +27,21 @@ const queries = {
     usa: 'are there companies from germany in this dataset?.',
 }
 
-type messagesType = {
+type Queries = keyof typeof queries
+
+type Messages = {
     role: string
     content: string
 }[]
 
 export function App() {
     const [data, setData] = useState<unknown>(dataset)
-    const [results, setResults] = useState('')
+    const [results, setResults] = useState('Results will show here...')
+    const [selectedQuery, setSelectedQuery] = useState<Queries | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const messages: messagesType = []
+    const messages: Messages = []
 
-    const handleClick = (query: keyof typeof queries) => {
+    const handleClick = (query: Queries) => {
         console.log(messages)
         setIsLoading(true)
 
@@ -70,11 +73,15 @@ export function App() {
 
     return (
         <div class="grid gap-12">
-            <h1 class="text-5xl">MIKO vs AI</h1>
+            <h1 class="grid grid-flow-col justify-center gap-2 text-5xl">
+                <span class="reverse">🥊</span>
+                MIKO vs AI 🥊
+            </h1>
             <div class="grid gap-8">
                 <pre>
                     <code>
                         <textarea
+                            rows={14}
                             onChange={(e) => {
                                 setData((e.target as HTMLTextAreaElement).value)
                             }}
@@ -83,21 +90,42 @@ export function App() {
                         </textarea>
                     </code>
                 </pre>
-                <button
-                    class="rounded-lg border border-indigo-700 py-2 px-4 disabled:cursor-not-allowed disabled:opacity-50"
-                    onClick={() => handleClick('llc')}
-                    disabled={isLoading}
-                >
-                    Count LLC
-                </button>
-                <button
-                    class="rounded-lg border border-indigo-700 py-2 px-4 disabled:cursor-not-allowed disabled:opacity-50"
-                    onClick={() => handleClick('usa')}
-                    disabled={isLoading}
-                >
-                    USA
-                </button>
-                <textarea>{isLoading ? 'Loading...' : results}</textarea>
+                <div class="grid gap-2 text-left">
+                    <label htmlFor="location" class="text-sm font-medium">
+                        Query
+                    </label>
+                    <div class="grid grid-flow-col gap-8">
+                        <select
+                            class="block w-full rounded-md border-0 py-2 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            onChange={(e) =>
+                                setSelectedQuery((e.target as HTMLSelectElement).value as Queries)
+                            }
+                        >
+                            <option value="" disabled selected hidden>
+                                Select one
+                            </option>
+                            {Object.entries(queries).map(([key, val]) => {
+                                return (
+                                    <option key={key} value={key}>
+                                        {val}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                        <button
+                            class="rounded-lg border border-indigo-700 py-2 px-4 disabled:cursor-not-allowed disabled:opacity-50"
+                            onClick={() =>
+                                selectedQuery
+                                    ? handleClick(selectedQuery)
+                                    : setResults("You didn't select a query")
+                            }
+                            disabled={isLoading}
+                        >
+                            Query
+                        </button>
+                    </div>
+                </div>
+                <textarea rows={4}>{isLoading ? 'Loading...' : results}</textarea>
                 <small>
                     Powered by <code>chatGPT</code>
                 </small>
