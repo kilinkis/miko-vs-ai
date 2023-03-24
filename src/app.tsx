@@ -48,6 +48,7 @@ export function App() {
         })
         console.log(data)
 
+        // IRL, don't want to put the API in the client
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
