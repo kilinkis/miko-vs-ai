@@ -1,30 +1,16 @@
 import {useState} from 'preact/hooks'
 import './app.css'
+import dataset from './data.json'
 
 // maybe try https://marketplace.visualstudio.com/items?itemName=stivo.tailwind-fold
 
-const dataset = [
-    {
-        companyName: 'Acme LLC',
-        country: 'United States',
-    },
-    {
-        companyName: 'Apple llc',
-        country: 'USA',
-    },
-    {
-        companyName: 'Wayne industries',
-        country: 'United States of America',
-    },
-    {
-        companyName: 'Corona limited liability company',
-        country: 'Germany',
-    },
-]
-
 const queries = {
     llc: 'how many "llc" are there in the dataset (case insensitive)? Consider "limited liability company" as "llc".',
-    usa: 'are there companies from germany in this dataset?.',
+    usa: 'are there companies from USA in this dataset?.',
+    eu: 'Are there companies from Europe in this dataset?',
+    nordics: 'Are there companies from the nordic countries in this dataset?',
+    size: 'List companies with more than 1000 employees',
+    size2: 'List companies with more than 1000 employees in France',
 }
 
 type Queries = keyof typeof queries
@@ -32,6 +18,10 @@ type Queries = keyof typeof queries
 const queriesLabels: Record<string, string> = {
     llc: 'How many Limited Liability Companies found?',
     usa: 'Are there companies from USA in this dataset?',
+    eu: 'Are there companies from Europe in this dataset?',
+    nordics: 'Are there companies from the nordic countries in this dataset?',
+    size: 'List companies with more than 1000 employees',
+    size2: 'List company names with more than 1000 employees in France',
 }
 
 type Messages = {
@@ -54,7 +44,6 @@ export function App() {
             role: 'user',
             content: `${queries[query]}: \n ${JSON.stringify(data)}`,
         })
-        console.log(data)
 
         // IRL, don't want to put the API in the client
         fetch('https://api.openai.com/v1/chat/completions', {
@@ -69,9 +58,9 @@ export function App() {
             }),
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.info(data)
-                setResults(data.choices[0].message.content.trim())
+            .then((responseData) => {
+                console.info(responseData)
+                setResults(responseData.choices[0].message.content.trim())
                 setIsLoading(false)
             })
     }
